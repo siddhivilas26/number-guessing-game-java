@@ -1,0 +1,77 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.game-container {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 400px;
+    margin: 80px auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 10;
+}
+
+h1 {
+    color: #333;
+}
+
+.instructions {
+    color: #555;
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 10px;
+    width: 200px;
+    margin: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.reset-btn {
+    background-color: #f44336;
+}
+
+.reset-btn:hover {
+    background-color: #d32f2f;
+}
+
+.result-text {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.correct {
+    color: green;
+}
+
+#confettiCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 5;
+}

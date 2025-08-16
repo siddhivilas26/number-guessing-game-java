@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>🎯 Number Guessing Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎯 Number Guessing Game</h1>
+        <p class="instructions">Guess the number between <strong>1</strong> and <strong>100</strong>!</p>
+        
+        <input type="number" id="guessInput" placeholder="Enter your guess">
+        <button onclick="makeGuess()">Guess</button>
+        <button class="reset-btn" onclick="resetGame()">🔄 Reset</button>
+        
+        <p id="result" class="result-text"></p>
+    </div>
+
+    <!-- Confetti canvas -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <script>
+        function makeGuess() {
+            const guess = document.getElementById('guessInput').value;
+            fetch(`/guess?number=${guess}`)
+                .then(res => res.text())
+                .then(data => {
+                    const resultEl = document.getElementById('result');
+                    resultEl.innerText = data;
+
+                    if (data.includes("Correct")) {
+                        resultEl.classList.add("correct");
+                        startConfetti(); // 🎉 trigger animation
+                    } else {
+                        resultEl.classList.remove("correct");
+                    }
+                });
+        }
+
+        function resetGame() {
+            fetch(`/guess?number=-1`)
+                .then(() => {
+                    document.getElementById('result').innerText = "";
+                    document.getElementById('guessInput').value = "";
+                    stopConfetti(); // stop animation
+                });
+        }
+
+        // 🎉 Confetti animation
+        let confettiCtx, confettiPieces = [], confettiInterval;
+
+        function startConfetti() {
+            const canvas = document.getElementById('confettiCanvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            confettiCtx = canvas.getContext('2d');
+
+            confettiPieces = Array.from({ length: 100 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                r: Math.random() * 6 + 4,
+                d: Math.random() * 50 + 50,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                tilt: Math.random() * 10 - 10
+            }));
+
+            confettiInterval = setInterval(drawConfetti, 20);
+        }
+
+        function drawConfetti() {
+            confettiCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            confettiPieces.forEach(p => {
+                confettiCtx.beginPath();
+                confettiCtx.fillStyle = p.color;
+                confettiCtx.ellipse(p.x, p.y, p.r, p.r / 2, Math.PI / 4, 0, 2 * Math.PI);
+                confettiCtx.fill();
+
+                p.y += Math.cos(p.d) + 1 + p.r / 2;
+                p.x += Math.sin(p.d);
+
+                if (p.y > window.innerHeight) {
+                    p.x = Math.random() * window.innerWidth;
+                    p.y = -10;
+                }
+            });
+        }
+
+        function stopConfetti() {
+            clearInterval(confettiInterval);
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+</body>
+</html>
